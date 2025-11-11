@@ -18,6 +18,7 @@
 #define RtlMultiByteToUnicodeN_CRC32b       0xaba11095
 #define NtAllocateVirtualMemory_CRC32b      0xec50426f
 #define NtFlushInstructionCache_CRC32b      0xc5f7ca5e
+#define NtDelayExecution_CRC32b				710014335
 
 extern void *get_ntdll();
 

