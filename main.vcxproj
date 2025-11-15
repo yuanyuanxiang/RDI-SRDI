@@ -143,14 +143,13 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <EntryPointSymbol>start</EntryPointSymbol>
       <AdditionalDependencies>$(SolutionDir)src\masm\peb.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
-    <ClCompile Include="src\c\peb.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\masm\peb.masm">
@@ -158,10 +157,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\h\defs.h" />
     <ClInclude Include="src\h\dll.h" />
-    <ClInclude Include="src\h\peb.h" />
-    <ClInclude Include="src\h\structs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

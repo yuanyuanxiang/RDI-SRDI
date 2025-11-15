@@ -15,24 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\c\peb.c">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="main.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\h\defs.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\h\dll.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\h\peb.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\h\structs.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
